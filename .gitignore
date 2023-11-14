@@ -8,6 +8,7 @@ build/
 mus_simulator_env/
 mus_simulator_vtune_perf/
 processed _data/
+raw_data_outdated/
 .idea/
 .vscode/
 
