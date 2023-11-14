@@ -3,3 +3,11 @@
 *.o
 *.rpt
 *hs/
+bin/
+build/
+mus_simulator_env/
+mus_simulator_vtune_perf/
+processed _data/
+.idea/
+.vscode/
+
