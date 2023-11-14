@@ -2,6 +2,7 @@
 *.txt
 *.o
 *.rpt
+*.data
 *hs/
 bin/
 build/
