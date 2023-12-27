@@ -5,7 +5,7 @@
 *.data
 *hs/
 bin/
-build/
+[Bb]uild/
 mus_simulator_env/
 mus_simulator_vtune_perf/
 processed_data/
