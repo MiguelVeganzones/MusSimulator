@@ -16,3 +16,4 @@ raw_data_outdated/
 mus_simulator_venv/
 *.rpt
 data_*/
+cmake_install.cmake
