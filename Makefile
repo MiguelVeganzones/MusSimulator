@@ -1,15 +1,16 @@
-CXX = 				g++-12
+CXX = 				g++
 
 DEBUG_CXXFLAGS =  	-fdiagnostics-color=always \
 					-fdiagnostics-show-template-tree \
 					-fdiagnostics-path-format=inline-events \
 					-fdiagnostics-show-caret \
 					-ggdb3 \
-					-O1 \
+					-O0 \
 					-Wall \
 					-Wextra \
 					-Wshadow \
 					-Wconversion \
+					-Wmisleading-indentation \
 					-fsanitize=address \
 					-fsanitize=leak \
 					-fsanitize=undefined \
@@ -25,11 +26,12 @@ RELEASE_CXXFLAGS =  -fdiagnostics-color=always \
 					-fdiagnostics-path-format=inline-events \
 					-fdiagnostics-show-caret \
 					-ggdb3 \
-					-O3 \
+					-O2 \
 					-Wall \
 					-Wextra \
 					-Wshadow \
 					-Wconversion \
+					-Wmisleading-indentation \
 					-Werror \
 					-pedantic \
 					-mavx \
@@ -46,6 +48,7 @@ FULL_RELEASE_CXXFLAGS =  -fdiagnostics-color=always \
 					-Wextra \
 					-Wshadow \
 					-Wconversion \
+					-Wmisleading-indentation \
 					-Werror \
 					-pedantic \
 					-mavx \
@@ -65,16 +68,12 @@ else
 	OUT_DIR = bin/debug
 endif
 
-MUS_SIMULATOR_LIB = 	-ltbb -lpthread
-MUS_SIMULATOR_INCL = 	-I/home/miguelveganzones/Libraries/parallel-hashmap-master/parallel_hashmap
-MUS_SIMULATOR_BUILD_DIR = 	.
-
 all: mus_simulator
 
 mus_simulator:
 	@echo Building $@..."\n"
-	@mkdir -p $(MUS_SIMULATOR_BUILD_DIR)/${OUT_DIR}
-	$(CXX) $(CXXFLAGS) $(MUS_SIMULATOR_INCL) $(MUS_SIMULATOR_BUILD_DIR)/$@.cpp ${MUS_SIMULATOR_LIB} -o $(MUS_SIMULATOR_BUILD_DIR)/${OUT_DIR}/$@
+	@mkdir -p ${OUT_DIR}
+	$(CXX) $(CXXFLAGS) $@.cpp -o ${OUT_DIR}/$@
 	@echo Built $@ successfully."\n"
 	
 done:

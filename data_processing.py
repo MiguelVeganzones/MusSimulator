@@ -1,34 +1,36 @@
 import pandas as pd
 import os
 
-def game_sort_key_impl(a):
-    if a < 31:
-        return 0 + a % 1
-    if int(a) == 31:
-        return 10 + a % 1
-    if int(a) == 32:
-        return 9 + a % 1
-    if int(a) == 40:
-        return 8 + a % 1
-    if int(a) == 37:
-        return 7 + a % 1
-    if int(a) == 36:
-        return 6 + a % 1
-    if int(a) == 35:
-        return 5 + a % 1
-    if int(a) == 34:
-        return 4 + a % 1
-    if int(a) == 33:
-        return 3 + a % 1
+def game_sort_key_impl(game_value):
+    tie_breaker = game_value % 1
+    if game_value < 31:
+        return 0 + tie_breaker
+    if int(game_value) == 31:
+        return 10 + tie_breaker
+    if int(game_value) == 32:
+        return 9 + tie_breaker
+    if int(game_value) == 40:
+        return 8 + tie_breaker
+    if int(game_value) == 37:
+        return 7 + tie_breaker
+    if int(game_value) == 36:
+        return 6 + tie_breaker
+    if int(game_value) == 35:
+        return 5 + tie_breaker
+    if int(game_value) == 34:
+        return 4 + tie_breaker
+    if int(game_value) == 33:
+        return 3 + tie_breaker
     
 def game_sort_key(arr):
-    return [game_sort_key_impl(a) for a in arr]
+    return [game_sort_key_impl(value) for value in arr]
 
 if __name__ =="__main__":
     source_filename = "data_600000_samples"
-    data = pd.read_csv(f"{source_filename}.csv")
+    data = pd.read_csv(f"raw_data/{source_filename}.csv")
 
     print(data.head())
+    print(data)
 
     grande = data[['Mano', 'Grande', 'Stddev_grande', 'Grande_value']].sort_values('Grande_value', ascending=False)
     print(grande)
@@ -51,13 +53,13 @@ if __name__ =="__main__":
     juego_sin_pares = data[['Juego_repr', 'Juego_1', 'Stddev_juego_1', 'Juego_2', 'Stddev_juego_2', 'Juego_value', 'Pares_value']].query("`Juego_value` >= 31 and `Pares_value` < 1").groupby('Juego_repr', as_index=False).mean().sort_values('Juego_value', key=game_sort_key, ascending=False)
     print(juego_sin_pares)
 
-    j = pd.read_csv("juego.csv")
-    j_s_p = pd.read_csv("juego_sin_pares.csv")
-    j_c_p = pd.read_csv("juego_con_pares.csv")
+    j = pd.read_csv("raw_data_outaded/juego.csv")
+    j_s_p = pd.read_csv("raw_data_outaded/juego_sin_pares.csv")
+    j_c_p = pd.read_csv("raw_data_outaded/juego_con_pares.csv")
     
-    p = pd.read_csv("punto.csv")
-    p_s_p = pd.read_csv("punto_sin_pares.csv")
-    p_c_p = pd.read_csv("punto_con_pares.csv")
+    p = pd.read_csv("raw_data_outaded/punto.csv")
+    p_s_p = pd.read_csv("raw_data_outaded/punto_sin_pares.csv")
+    p_c_p = pd.read_csv("raw_data_outaded/punto_con_pares.csv")
 
     juego_extra_data_combined = j.merge(j_s_p, on='juego', how='outer', suffixes=('_general', '_sin_pares')).merge(j_c_p, on='juego', how='outer').rename(columns={"probabilidad": "probabilidad_con_pares"}).sort_values('juego', key=game_sort_key, ascending=False)
     print(juego_extra_data_combined)
@@ -79,7 +81,9 @@ if __name__ =="__main__":
     assert(round(sum(j['probabilidad'])) == 100)
     assert(round(sum(j_s_p['probabilidad'])) == 100)
     assert(round(sum(j_c_p['probabilidad'])) == 100)
+    print(pares['Pares_value'].nunique(), pares['Pares_repr'].nunique())
     assert(pares['Pares_value'].nunique() == pares['Pares_repr'].nunique())
+    assert(pares['Pares_value'].nunique() == 208)
 
     os.makedirs(f'processed_data/{source_filename}', exist_ok=True)  
     data.to_csv(f'processed_data/{source_filename}/0___raw_data.csv')
@@ -91,5 +95,6 @@ if __name__ =="__main__":
     punto.to_csv(f'processed_data/{source_filename}/6_punto.csv')
     punto_extra_data_combined.to_csv(f'processed_data/{source_filename}/7_punto_extra_data.csv')
 
+    print("Here")
 
     pass

@@ -394,19 +394,19 @@ public:
     inline auto get_pair_repr() const -> std::string
     {
         std::string ret(8, ' ');
-        auto        offset = 1000;
+        auto        repr = std::to_string((int)m_base_pair_score);
         for (int i = 0; i != 4; ++i)
         {
-            if ((int)m_base_pair_score % offset > 0)
+            if (repr.length() >= (unsigned)i + 1)
             {
-                ret[i * 2] = cards[i].repr();
+                ret[i * 2] = Card(repr[repr.length() - i - 1]).repr();
             }
             else
             {
                 ret[i * 2] = Card(CardType::NULL_CARD).repr();
             }
-            offset /= 10;
         }
+        std::cout << repr << " -> " << ret << "\n";
         return ret + get_board_position_repr();
     }
 
