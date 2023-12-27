@@ -13,4 +13,6 @@ raw_data_outdated/
 .idea/
 .vscode/
 !CMakeLists.txt
-
+venv/
+mus_simulator_env/
+*.rpt
